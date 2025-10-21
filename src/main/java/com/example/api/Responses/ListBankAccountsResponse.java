@@ -1,4 +1,4 @@
-package com.example.api.Responses;
+package com.example.api.responses;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.api.Objects;
+package com.example.api.objects;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

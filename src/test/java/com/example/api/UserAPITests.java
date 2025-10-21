@@ -17,13 +17,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
-import com.example.api.Handlers.UserAPI;
-import com.example.api.Objects.Address;
-import com.example.api.Objects.User;
-import com.example.api.Requests.CreateUserRequest;
-import com.example.api.Requests.UpdateUserRequest;
-import com.example.api.Responses.UserResponse;
-import com.example.api.Security.JwtUtil;
+import com.example.api.handlers.UserAPI;
+import com.example.api.objects.Address;
+import com.example.api.objects.User;
+import com.example.api.requests.CreateUserRequest;
+import com.example.api.requests.UpdateUserRequest;
+import com.example.api.responses.UserResponse;
+import com.example.api.security.JwtUtil;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
@@ -33,7 +33,7 @@ import org.springframework.web.server.ResponseStatusException;
 @TestMethodOrder(OrderAnnotation.class)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 @SuppressWarnings("null")
-public class UserAPITests {
+class UserAPITests {
 
 	private JwtUtil jwtUtil;
 	private UserAPI userAPI;

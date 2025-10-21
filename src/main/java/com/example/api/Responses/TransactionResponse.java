@@ -1,8 +1,8 @@
-package com.example.api.Responses;
+package com.example.api.responses;
 
 import java.time.LocalDateTime;
 
-import com.example.api.Objects.Transaction.TransactionTypes;
+import com.example.api.objects.Transaction.TransactionTypes;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,6 +1,6 @@
-package com.example.api.Requests;
+package com.example.api.requests;
 
-import com.example.api.Objects.Account.AccountTypes;
+import com.example.api.objects.Account.AccountTypes;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

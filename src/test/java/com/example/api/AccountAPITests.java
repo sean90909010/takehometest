@@ -15,19 +15,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.api.Handlers.AccountsAPI;
-import com.example.api.Objects.Account;
-import com.example.api.Objects.Address;
-import com.example.api.Objects.Transaction;
-import com.example.api.Objects.Transaction.TransactionTypes;
-import com.example.api.Objects.User;
-import com.example.api.Requests.CreateBankAccountRequest;
-import com.example.api.Requests.CreateTransactionRequest;
-import com.example.api.Requests.UpdateBankAccountRequest;
-import com.example.api.Responses.BankAccountResponse;
-import com.example.api.Responses.ListBankAccountsResponse;
-import com.example.api.Responses.ListTransactionsResponse;
-import com.example.api.Responses.TransactionResponse;
+import com.example.api.handlers.AccountsAPI;
+import com.example.api.objects.Account;
+import com.example.api.objects.Address;
+import com.example.api.objects.Transaction;
+import com.example.api.objects.User;
+import com.example.api.objects.Transaction.TransactionTypes;
+import com.example.api.requests.CreateBankAccountRequest;
+import com.example.api.requests.CreateTransactionRequest;
+import com.example.api.requests.UpdateBankAccountRequest;
+import com.example.api.responses.BankAccountResponse;
+import com.example.api.responses.ListBankAccountsResponse;
+import com.example.api.responses.ListTransactionsResponse;
+import com.example.api.responses.TransactionResponse;
 
 @SuppressWarnings("null")
 class AccountAPITests {
@@ -308,8 +308,6 @@ class AccountAPITests {
         testAccount.addTransaction(transaction1);
         testAccount.addTransaction(transaction2);
         testUser.getAccounts().put(accountNumber, testAccount);
-
-        System.out.println("Transaction Size: " + testUser.getAccounts().get(accountNumber).getTransactions().size());
 
         ResponseEntity<ListTransactionsResponse> response = accountsApi.listTransactions(testUser, accountNumber);
         assertEquals(HttpStatus.OK, response.getStatusCode());

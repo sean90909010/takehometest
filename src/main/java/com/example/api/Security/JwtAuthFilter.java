@@ -1,4 +1,4 @@
-package com.example.api.Security;
+package com.example.api.security;
 
 import org.springframework.lang.NonNull;
 import jakarta.servlet.FilterChain;
@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.example.api.Objects.User;
+import com.example.api.objects.User;
 
 import java.io.IOException;
 import java.util.Collections;

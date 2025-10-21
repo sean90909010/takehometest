@@ -1,4 +1,4 @@
-package com.example.api.Handlers;
+package com.example.api.handlers;
 
 import java.security.SecureRandom;
 import java.util.Collections;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.api.Objects.User;
-import com.example.api.Requests.CreateUserRequest;
-import com.example.api.Requests.UpdateUserRequest;
-import com.example.api.Responses.AuthUserResponse;
-import com.example.api.Responses.UserResponse;
-import com.example.api.Security.JwtUtil;
+import com.example.api.objects.User;
+import com.example.api.requests.CreateUserRequest;
+import com.example.api.requests.UpdateUserRequest;
+import com.example.api.responses.AuthUserResponse;
+import com.example.api.responses.UserResponse;
+import com.example.api.security.JwtUtil;
 
 import jakarta.validation.Valid;
 

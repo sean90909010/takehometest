@@ -1,6 +1,6 @@
-package com.example.api.Requests;
+package com.example.api.requests;
 
-import com.example.api.Objects.Address;
+import com.example.api.objects.Address;
 
 import lombok.Builder;
 import lombok.Data;

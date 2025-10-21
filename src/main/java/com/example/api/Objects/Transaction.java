@@ -1,8 +1,8 @@
-package com.example.api.Objects;
+package com.example.api.objects;
 
 import java.time.LocalDateTime;
 
-import com.example.api.Utilities.IDGenerator;
+import com.example.api.utilities.IDGenerator;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

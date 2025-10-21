@@ -1,6 +1,6 @@
-package com.example.api.Requests;
+package com.example.api.requests;
 
-import com.example.api.Objects.Transaction;
+import com.example.api.objects.Transaction;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

@@ -1,8 +1,8 @@
-package com.example.api.Responses;
+package com.example.api.responses;
 
 import java.time.LocalDateTime;
 
-import com.example.api.Objects.Account.AccountTypes;
+import com.example.api.objects.Account.AccountTypes;
 
 import lombok.Builder;
 import lombok.Data;

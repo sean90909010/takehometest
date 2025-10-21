@@ -1,4 +1,4 @@
-package com.example.api.Objects;
+package com.example.api.objects;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

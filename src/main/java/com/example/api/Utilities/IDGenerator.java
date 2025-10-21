@@ -1,4 +1,4 @@
-package com.example.api.Utilities;
+package com.example.api.utilities;
 
 import java.security.SecureRandom;
 

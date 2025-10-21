@@ -2,6 +2,7 @@ package com.example.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +14,7 @@ public class Main {
     }
 
     @GetMapping("/hello")
-    public String hello() {
-        return "Hello, World!";
+    public ResponseEntity<String> hello() {
+        return ResponseEntity.ok().body("Hello, World!");
     }
 }

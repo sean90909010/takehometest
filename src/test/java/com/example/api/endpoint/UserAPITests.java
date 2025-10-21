@@ -1,4 +1,4 @@
-package com.example.api;
+package com.example.api.endpoint;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;

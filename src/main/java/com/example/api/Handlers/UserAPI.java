@@ -1,6 +1,5 @@
 package com.example.api.handlers;
 
-import java.security.SecureRandom;
 import java.util.Collections;
 
 import org.springframework.http.HttpStatus;
@@ -23,16 +22,12 @@ import com.example.api.requests.UpdateUserRequest;
 import com.example.api.responses.AuthUserResponse;
 import com.example.api.responses.UserResponse;
 import com.example.api.security.JwtUtil;
+import com.example.api.utilities.IDGenerator;
 
 import jakarta.validation.Valid;
 
 @RestController
 public class UserAPI {
-
-    private static final String PREFIX = "usr-";
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private static final int ID_LENGTH = 6; // change as desired
-    private static final SecureRandom RANDOM = new SecureRandom();
 
     private JwtUtil jwtUtil;
 
@@ -40,20 +35,12 @@ public class UserAPI {
         this.jwtUtil = jwtUtil;
     }
 
-    public static String generateUserId() {
-        StringBuilder sb = new StringBuilder(PREFIX);
-        for (int i = 0; i < ID_LENGTH; i++) {
-            int index = RANDOM.nextInt(CHARACTERS.length());
-            sb.append(CHARACTERS.charAt(index));
-        }
-        return sb.toString();
-    }
     
     @PostMapping(value = "/v1/users", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
 
         User newUser = User.builder()
-        .id(generateUserId())
+        .id(IDGenerator.generateUserId())
         .name(request.name)
         .address(request.address)
         .phoneNumber(request.phoneNumber)

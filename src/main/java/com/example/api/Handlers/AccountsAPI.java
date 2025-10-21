@@ -30,9 +30,27 @@ import jakarta.validation.Valid;
 
 @RestController
 public class AccountsAPI {
+    /**
+     * REST controller that manages bank accounts and transactions for the
+     * authenticated user. Endpoints are modeled after the project's OpenAPI
+     * specification and are intentionally lightweight in-memory implementations
+     * (for testing/demo purposes).
+     *
+     * <p>All methods expect an authenticated {@code User} to be provided by
+     * Spring Security via the {@code @AuthenticationPrincipal} annotation and
+     * operate only on that user's accounts.</p>
+     */
     
 
     @PostMapping(value = "/v1/accounts", produces = "application/json")
+    /**
+     * Create a new bank account for the authenticated user.
+     *
+     * @param authUser the authenticated user (injected by Spring Security)
+     * @param request  the create account request payload; validated via Jakarta Validation
+     * @return ResponseEntity containing the created {@link BankAccountResponse} with HTTP 201
+     * @throws ResponseStatusException if any uniqueness/validation check fails (mapped to appropriate HTTP status)
+     */
     public ResponseEntity<BankAccountResponse> createAccount(@AuthenticationPrincipal User authUser, @Valid @RequestBody CreateBankAccountRequest request) {
         Account newAccount = Account.builder()
             .accountNumber("01" + String.format("%06d", authUser.getAccounts().size() + 1))
@@ -60,6 +78,12 @@ public class AccountsAPI {
     }
 
     @GetMapping(value = "/v1/accounts", produces = "application/json")
+    /**
+     * List all bank accounts belonging to the authenticated user.
+     *
+     * @param authUser the authenticated user (injected by Spring Security)
+     * @return ResponseEntity containing a {@link ListBankAccountsResponse} with HTTP 200
+     */
     public ResponseEntity<ListBankAccountsResponse> listAccounts(@AuthenticationPrincipal User authUser) {
         
         List<BankAccountResponse> accountResponses = authUser.getAccounts().values().stream()
@@ -80,6 +104,14 @@ public class AccountsAPI {
     }
 
     @GetMapping(value = "/v1/accounts/{accountNumber}", produces = "application/json")
+    /**
+     * Fetch a single bank account by its account number for the authenticated user.
+     *
+     * @param authUser      the authenticated user (injected by Spring Security)
+     * @param accountNumber the account number path variable
+     * @return ResponseEntity containing the {@link BankAccountResponse} with HTTP 200
+     * @throws ResponseStatusException with HTTP 404 if the account does not exist for the user
+     */
     public ResponseEntity<BankAccountResponse> getAccount(@AuthenticationPrincipal User authUser, @PathVariable String accountNumber) {
         Account account = authUser.getAccounts().get(accountNumber);
         if (account == null) {
@@ -101,6 +133,16 @@ public class AccountsAPI {
     }
 
     @PatchMapping(value = "/v1/accounts/{accountNumber}", produces = "application/json")
+    /**
+     * Partially update account metadata (such as name or type) for the
+     * authenticated user's account.
+     *
+     * @param authUser      the authenticated user (injected by Spring Security)
+     * @param accountNumber the account number path variable
+     * @param request       payload containing updatable fields; validated via Jakarta Validation
+     * @return ResponseEntity with the updated {@link BankAccountResponse}
+     * @throws ResponseStatusException with HTTP 404 if the account does not exist for the user
+     */
     public ResponseEntity<BankAccountResponse> updateAccount(
             @AuthenticationPrincipal User authUser,
             @PathVariable String accountNumber,
@@ -133,6 +175,13 @@ public class AccountsAPI {
     }
 
     @DeleteMapping("/v1/accounts/{accountNumber}")
+    /**
+     * Delete a bank account for the authenticated user.
+     *
+     * @param authUser      the authenticated user (injected by Spring Security)
+     * @param accountNumber the account number path variable
+     * @throws ResponseStatusException with HTTP 404 if the account does not exist for the user
+     */
     public void deleteAccount(@AuthenticationPrincipal User authUser, @PathVariable String accountNumber) {
         if(authUser.getAccounts().get(accountNumber) == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found");
@@ -141,6 +190,16 @@ public class AccountsAPI {
     }
 
     @PostMapping(value = "/v1/accounts/{accountNumber}/transactions", produces = "application/json")
+    /**
+     * Create a transaction against a user's account. This will update the
+     * account balance and persist the transaction in-memory.
+     *
+     * @param authUser      the authenticated user (injected by Spring Security)
+     * @param accountNumber the account number path variable
+     * @param request       the create transaction payload; validated via Jakarta Validation
+     * @return ResponseEntity with the created {@link TransactionResponse} and HTTP 201
+     * @throws ResponseStatusException with HTTP 404 if the account does not exist, or 422 if insufficient funds
+     */
     public ResponseEntity<TransactionResponse> createTransaction(
             @AuthenticationPrincipal User authUser, 
             @PathVariable String accountNumber,
@@ -182,6 +241,14 @@ public class AccountsAPI {
     }
 
     @GetMapping(value = "/v1/accounts/{accountNumber}/transactions", produces = "application/json")
+    /**
+     * List all transactions for a given account belonging to the authenticated user.
+     *
+     * @param authUser      the authenticated user (injected by Spring Security)
+     * @param accountNumber the account number path variable
+     * @return ResponseEntity with {@link ListTransactionsResponse} and HTTP 200
+     * @throws ResponseStatusException with HTTP 404 if the account does not exist
+     */
     public ResponseEntity<ListTransactionsResponse> listTransactions(
             @AuthenticationPrincipal User authUser, @PathVariable String accountNumber) {
         Account account = authUser.getAccounts().get(accountNumber);
@@ -203,6 +270,16 @@ public class AccountsAPI {
     }
 
     @GetMapping(value = "/v1/accounts/{accountNumber}/transactions/{transactionId}", produces = "application/json")
+    /**
+     * Fetch a single transaction by ID for a given account belonging to the
+     * authenticated user.
+     *
+     * @param authUser      the authenticated user (injected by Spring Security)
+     * @param accountNumber the account number path variable
+     * @param transactionId the transaction id path variable
+     * @return ResponseEntity with {@link TransactionResponse} and HTTP 200
+     * @throws ResponseStatusException with HTTP 404 if the account or transaction does not exist
+     */
     public ResponseEntity<TransactionResponse> getTransaction(
             @AuthenticationPrincipal User authUser, 
             @PathVariable String accountNumber,

@@ -3,6 +3,8 @@ package com.example.api.Handlers;
 import java.security.SecureRandom;
 import java.util.Collections;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,8 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import com.example.api.Exceptions.UserNotFoundException;
 import com.example.api.Objects.User;
 import com.example.api.Requests.CreateUserRequest;
 import com.example.api.Requests.UpdateUserRequest;
@@ -48,7 +50,7 @@ public class UserAPI {
     }
     
     @PostMapping(value = "/v1/users", consumes = "application/json", produces = "application/json")
-    public UserResponse createUser(@Valid @RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
 
         User newUser = User.builder()
         .id(generateUserId())
@@ -67,20 +69,21 @@ public class UserAPI {
                 new UsernamePasswordAuthenticationToken(newUser, null, Collections.emptyList());
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        return userToAuthUserResponse(newUser, token);
+        return ResponseEntity.created(java.net.URI.create("/v1/users/" + newUser.getId()))
+                     .body(userToAuthUserResponse(newUser, token));
         
     }
 
     @PreAuthorize("#userId == principal.id")
     @GetMapping(value = "/v1/users/{userId}", produces = "application/json")
-    public UserResponse getUser(@PathVariable("userId") String userId) {
+    public ResponseEntity<UserResponse> getUser(@PathVariable("userId") String userId) {
         System.out.println("Fetching user with ID: " + userId);
         System.out.println("Current users in store: " + User.users.keySet());
         User user = User.users.get(userId);
         if (user == null) {
-            throw new UserNotFoundException(userId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-        return userToUserResponse(user);
+        return ResponseEntity.ok().body(userToUserResponse(user));
     }
 
     @PatchMapping(value = "/v1/users/{userId}", consumes = "application/json", produces = "application/json")
@@ -88,7 +91,7 @@ public class UserAPI {
         User existingUser = User.users.get(userId);
 
         if (existingUser == null) {
-            throw new UserNotFoundException(userId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
         if (request.name != null) {
@@ -112,7 +115,7 @@ public class UserAPI {
     @DeleteMapping("/v1/users/{userId}")
     public void deleteUser(@PathVariable("userId") String userId) {
         if(!User.users.containsKey(userId)) {
-            throw new UserNotFoundException(userId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
         User.users.remove(userId);
     }

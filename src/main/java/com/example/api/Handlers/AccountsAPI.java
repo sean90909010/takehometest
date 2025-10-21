@@ -1,15 +1,10 @@
 package com.example.api.Handlers;
 
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.api.Objects.Account;
 import com.example.api.Objects.Transaction;
 import com.example.api.Objects.User;
+import com.example.api.Objects.Transaction.TransactionTypes;
 import com.example.api.Requests.CreateBankAccountRequest;
 import com.example.api.Requests.CreateTransactionRequest;
 import com.example.api.Requests.UpdateBankAccountRequest;
@@ -156,7 +152,7 @@ public class AccountsAPI {
         }
 
         // Check for sufficient funds for withdrawal transactions
-        if ("WITHDRAWAL".equals(request.getType()) && account.getBalance() < request.getAmount()) {
+        if (TransactionTypes.WITHDRAWAL.equals(request.getType()) && account.getBalance() < request.getAmount()) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Insufficient funds to process transaction");
         }
 
@@ -169,9 +165,9 @@ public class AccountsAPI {
         account.addTransaction(transaction);
 
         // Update balance
-        if ("DEPOSIT".equals(request.getType())) {
+        if (TransactionTypes.DEPOSIT.equals(request.getType())) {
             account.setBalance(account.getBalance() + request.getAmount());
-        } else if ("WITHDRAWAL".equals(request.getType())) {
+        } else if (TransactionTypes.WITHDRAWAL.equals(request.getType())) {
             account.setBalance(account.getBalance() - request.getAmount());
         }
 

@@ -1,41 +1,34 @@
-package com.example.api.Objects;
+package com.example.api.Responses;
 
 import java.time.LocalDateTime;
+
+import com.example.api.Objects.Transaction.TransactionTypes;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Builder
-@AllArgsConstructor
-@Getter
-@Setter
-public class Transaction {
+@Data
+public class TransactionResponse {
 
-    public enum TransactionTypes {
-        WITHDRAWAL,
-        DEPOSIT
-    }
 
     @NotBlank(message = "ID cannot be blank")
     @Pattern(regexp = "^tan-[A-Za-z0-9]$)", message = "ID must start with 'tan-' followed by alphanumeric characters")
     private String id;
-
     @Positive(message = "Amount must be greater than 0")
     @NotNull(message = "Amount cannot be null")
     private Double amount;
-
     @NotBlank(message = "Currency cannot be blank")
     private String currency;
-
     @NotBlank(message = "Transaction type cannot be blank")
     private TransactionTypes type;
-
     @Builder.Default
     private LocalDateTime createdTimestamp = LocalDateTime.now();
+    private String reference;
+    private String userId;
+    
 }

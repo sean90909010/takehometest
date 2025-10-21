@@ -1,85 +1,57 @@
-package com.example.api;
+package com.example.api.Objects;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Account {
 
+    @NotBlank(message = "Account number cannot be blank")
+    @Pattern(regexp = "^01\\d{6}$", message = "Account number must be 01 followed by 6 digits")
     private String accountNumber;
+
+    @NotBlank(message = "Sort code cannot be blank")
     private String sortCode;
+
+    @NotBlank(message = "Account name cannot be blank")
     private String name;
+
+    @NotBlank(message = "Account type cannot be blank")
     private String accountType;
-    private double balance;
+
+    @NotNull(message = "Balance cannot be null")
+    private Double balance;
+
+    @NotBlank(message = "Currency cannot be blank")
     private String currency;
-    private DateTime createdTimestamp;
-    private DateTime updatedTimestamp;
 
-    private List<Transaction> transactions;
+    @Builder.Default
+    private LocalDateTime createdTimestamp = LocalDateTime.now();
 
-    public Account(String accountNumber, String sortCode, String name, String accountType, double balance,
-            String currency) {
-        setAccountNumber(accountNumber);
-        setSortCode(sortCode);
-        setName(name);
-        setAccountType(accountType);
-        setBalance(balance);
-        setCurrency(currency);
-        this.createdTimestamp = LocalDateTime.now();
-        setUpdatedTimestamp(LocalDateTime.now());
+    @Builder.Default
+    private LocalDateTime updatedTimestamp = LocalDateTime.now();
 
-        transactions = new ArrayList<>();
-    }
+    @Builder.Default
+    private HashMap<String, Transaction> transactions = new HashMap<>();
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-    public String getSortCode() {
-        return sortCode;
-    }
-    public void setSortCode(String sortCode) {
-        this.sortCode = sortCode;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getAccountType() {
-        return accountType;
-    }
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
-    }
-    public double getBalance() {
-        return balance;
-    }
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-    public String getCurrency() {
-        return currency;
-    }
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-    public DateTime getCreatedTimestamp() {
-        return createdTimestamp;
-    }
-    public DateTime getUpdatedTimestamp() {
-        return updatedTimestamp;
-    }
-    public void setUpdatedTimestamp(DateTime updatedTimestamp) {
-        this.updatedTimestamp = updatedTimestamp;
-    }
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-    public void addTransaction(Transaction transaction) {
-        this.transactions.add(transaction);
+    public void addTransaction(@NotNull Transaction transaction) {
+        transactions.put(transaction.getId(), transaction);
     }
 
 }

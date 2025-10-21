@@ -1,56 +1,48 @@
-package com.example.api;
+package com.example.api.Objects;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 @Builder
+@AllArgsConstructor
+@Getter
+@Setter
 public class User {
 
+    public static final Map<String, User> users = new HashMap<>();
+
+    @Pattern(regexp = "^usr-[A-Za-z0-9]+$", message = "ID must start with 'usr-' followed by alphanumeric characters")
+    private String id;
+
+    @NotBlank
     private String name;
+    @NonNull
     private Address address;
+    @Pattern(regexp = "^\\+[1-9]\\d{1,14}$", message = "Invalid phone number format")
     private String phoneNumber;
+
+    @Email
+    @NotBlank
     private String email;
 
-    public User(String name, Address address, String phoneNumber, String email) {
-        setName(name);
-        setAddress(address);
-        setPhoneNumber(phoneNumber);
-        setEmail(email);
-    }
+    @Builder.Default
+    private LocalDateTime createdTimestamp = LocalDateTime.now();
 
-    public String getName() {
-        return name;
-    }
+    @Builder.Default
+    private LocalDateTime updatedTimestamp = LocalDateTime.now();
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    private HashMap<String, Account> accounts;
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        if (!phoneNumber.matches("^\\+[1-9]\\d{1,14}$")) {
-            throw new IllegalArgumentException("Invalid phone number format");
-        }
-
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
 }

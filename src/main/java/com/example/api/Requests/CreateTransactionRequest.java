@@ -3,16 +3,27 @@ package com.example.api.Requests;
 import com.example.api.Objects.Transaction;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateTransactionRequest {
 
-    @NotNull(message = "amount cannot be null")
+    public CreateTransactionRequest(Double amount, String currency, Transaction.TransactionTypes type) {
+        this.amount = amount;
+        this.currency = currency;
+        this.type = type;
+    }
+    
+    @NotBlank(message = "amount cannot be null")
     @Positive(message = "Amount must be greater than 0")
     @Valid
     private Double amount;
@@ -21,7 +32,7 @@ public class CreateTransactionRequest {
     @Valid
     private String currency;
 
-    @NotNull(message = "type cannot be null")
+    @NotBlank(message = "type cannot be null")
     @Valid
     private Transaction.TransactionTypes type;
 

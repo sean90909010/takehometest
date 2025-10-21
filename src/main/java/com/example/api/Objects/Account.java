@@ -19,6 +19,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Account {
 
+    public enum AccountTypes {
+        PERSONAL,
+        SAVINGS
+    }
+
     @NotBlank(message = "Account number cannot be blank")
     @Pattern(regexp = "^01\\d{6}$", message = "Account number must be 01 followed by 6 digits")
     private String accountNumber;
@@ -30,7 +35,7 @@ public class Account {
     private String name;
 
     @NotBlank(message = "Account type cannot be blank")
-    private String accountType;
+    private AccountTypes accountType;
 
     @NotNull(message = "Balance cannot be null")
     private Double balance;

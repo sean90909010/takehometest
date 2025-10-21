@@ -40,7 +40,6 @@ public class AccountsAPI {
      * Spring Security via the {@code @AuthenticationPrincipal} annotation and
      * operate only on that user's accounts.</p>
      */
-    
 
     @PostMapping(value = "/v1/accounts", produces = "application/json")
     /**

@@ -180,13 +180,15 @@ public class AccountsAPI {
      *
      * @param authUser      the authenticated user (injected by Spring Security)
      * @param accountNumber the account number path variable
+     * @return ResponseEntity with a success message and HTTP 200
      * @throws ResponseStatusException with HTTP 404 if the account does not exist for the user
      */
-    public void deleteAccount(@AuthenticationPrincipal User authUser, @PathVariable String accountNumber) {
+    public ResponseEntity<String> deleteAccount(@AuthenticationPrincipal User authUser, @PathVariable String accountNumber) {
         if(authUser.getAccounts().get(accountNumber) == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found");
         }
         authUser.getAccounts().remove(accountNumber);
+        return ResponseEntity.ok().body("Deleted account {accountNumber} sucessfuly".replace("{accountNumber}", accountNumber));
     }
 
     @PostMapping(value = "/v1/accounts/{accountNumber}/transactions", produces = "application/json")

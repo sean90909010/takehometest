@@ -87,7 +87,7 @@ public class UserAPI {
     }
 
     @PatchMapping(value = "/v1/users/{userId}", consumes = "application/json", produces = "application/json")
-    public UserResponse updateUser(@PathVariable("userId") String userId, @RequestBody UpdateUserRequest request) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable("userId") String userId, @RequestBody UpdateUserRequest request) {
         User existingUser = User.users.get(userId);
 
         if (existingUser == null) {
@@ -109,15 +109,17 @@ public class UserAPI {
 
         User.users.put(userId, existingUser);
 
-        return userToUserResponse(existingUser);
+        return ResponseEntity.ok().body(userToUserResponse(existingUser));
     }
 
     @DeleteMapping("/v1/users/{userId}")
-    public void deleteUser(@PathVariable("userId") String userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable("userId") String userId) {
         if(!User.users.containsKey(userId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
         User.users.remove(userId);
+        return ResponseEntity.ok().body("Deleted user {userId} successfully".replace("{userId}", userId));
+
     }
 
     private UserResponse userToUserResponse(User user) {
